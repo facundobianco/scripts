@@ -1,0 +1,24 @@
+#!/bin/sh
+# This script runs on OpenWRT and uses freedns.afraid.org's service
+
+[ `uci -P /var/state get network.wan.up` != 1 ] && /etc/init.d/network restart
+
+IP=`uci -P /var/state get network.wan.ipaddr`
+LASTIP=`uci -P /var/state get network.wan.lastipaddr`
+
+if [ "$IP" != "$LASTIP" ]
+then
+   wget \
+     -qO /dev/null \
+     http://freedns.afraid.org/dynamic/update.php?token==
+
+   # FreeDNS got my new IP? Ask to openDNS!
+   sleep 10
+   DNSLOOKUP=`nslookup your_ssh_domain.com 208.67.222.222 | sed -n '${s/.*: \(.*\) .*/\1/p}'`
+
+   if [ "$DNSLOOKUP" == "$IP" ]
+   then
+      date "+%Y%m%d %R  $IP" >> /var/log/ip.log
+      uci -P /var/state set network.wan.lastipaddr="$IP"
+   fi
+fi

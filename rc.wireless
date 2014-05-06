@@ -1,0 +1,30 @@
+#!/bin/sh
+# A 'lil fork from
+# http://undeadly.org/cgi?action=article&sid=20071224164233&mode=flat
+
+CONF="/etc/rc.wireless.conf"
+IFNAME=`sed -ne 's/IFNAME=\"\(.*\)\"/\1/p' "$CONF"`
+HFILE="/etc/hostname.$IFNAME"
+OPTS="-powersave"
+ADDR="dhcp"
+
+ifconfig "$IFNAME" scan | sed -ne 's/.*\(..:..:..:..:..:..\).*/\1/p' | \
+while read MAC
+do
+    if [ -r "$CONF" ]
+    then
+        . "$CONF"
+    else
+        exit 1
+    fi
+    
+    if [ "$?" = 0 ]
+    then
+        [ -n "$NWID" ]   && OUTPUT="nwid $NWID"
+        [ -n "$BSSID" ]  && OUTPUT="$OUTPUT bssid $BSSID"
+        [ -n "$NWKEY" ]  && OUTPUT="$OUTPUT nwkey $NWKEY"
+        [ -n "$WPAKEY" ] && OUTPUT="$OUTPUT wpakey $WPAKEY"
+        echo -e "$OUTPUT $OPTS\n$ADDR" > "$HFILE"
+	break
+    fi	
+done
