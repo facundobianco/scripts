@@ -12,7 +12,7 @@ then
      -qO /dev/null \
      http://freedns.afraid.org/dynamic/update.php?token==
 
-   # FreeDNS got my new IP? Ask to openDNS!
+   # Got freeDNS my new IP? Ask to openDNS!
    sleep 10
    DNSLOOKUP=`nslookup your_ssh_domain.com 208.67.222.222 | sed -n '${s/.*: \(.*\) .*/\1/p}'`
 
