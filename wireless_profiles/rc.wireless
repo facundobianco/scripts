@@ -13,11 +13,9 @@ do
     
     if [ "$?" = 0 ]
     then
-        OUTPUT="nwid $NWID"
-        [ -n "$BSSID" ]  && OUTPUT="$OUTPUT bssid $BSSID"
-        [ -n "$NWKEY" ]  && OUTPUT="$OUTPUT nwkey $NWKEY"
-        [ -n "$WPAKEY" ] && OUTPUT="$OUTPUT wpakey $WPAKEY"
-        echo -e "$OUTPUT $OPTS\n$ADDR" > "$HFILE"
+        [ -n "$NWKEY" ]  && KEY="nwkey $NWKEY"
+        [ -n "$WPAKEY" ] && KEY="wpakey $WPAKEY"
+        echo -e "nwid $NWID ${KEY:-} ${OPTS:-}\n${ADDR:-dhcp}" > "$HFILE"
 	break
     fi	
 done
