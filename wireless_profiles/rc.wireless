@@ -6,16 +6,17 @@ IFNAME="iwi0"
 CONF="/etc/rc.wireless.conf"
 HFILE="/etc/hostname.$IFNAME"
 
-ifconfig "$IFNAME" scan | sed -ne 's/.*\(..:..:..:..:..:..\).*/\1/p' | \
+ifconfig "$IFNAME" scan | sed -n '/  nwid/s/.*bssid \([^ ]*\) .*$/\1/p' | \
 while read MAC
 do
     . "$CONF"
     
     if [ "$?" = 0 ]
     then
-        [ -n "$NWKEY" ]  && KEY="nwkey $NWKEY"
-        [ -n "$WPAKEY" ] && KEY="wpakey $WPAKEY"
-        echo -e "nwid $NWID ${KEY:-} ${OPTS:-}\n${ADDR:-dhcp}" > "$HFILE"
+        OUTPUT="nwid $NWID"
+        [ -n "$NWKEY" ]  && OUTPUT="$OUTPUT nwkey $NWKEY"   || OUTPUT="$OUTPUT -nwkey"
+	[ -n "$WPAKEY" ] && OUTPUT="$OUTPUT wpakey $WPAKEY" || OUTPUT="$OUTPUT -wpakey"
+	echo -e "$OUTPUT $OPTS\n$ADDR" > "$HFILE"
 	break
     fi	
 done
