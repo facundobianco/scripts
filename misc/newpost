@@ -1,0 +1,23 @@
+#!/bin/bash
+# For lazy bloggers who use jekyll
+
+if [ ! -d _posts ]
+then
+    echo "Not the repository of your site"  
+    exit 1
+fi
+
+IFS='-'
+DATE=`date +%F`
+FILE="_posts/$DATE-$*.md"
+
+echo "---
+layout:   post
+title:    
+date:     $DATE
+summary:  
+category: 
+---
+" > "$FILE"
+
+"$EDITOR" "$FILE"
