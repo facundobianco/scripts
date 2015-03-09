@@ -23,13 +23,13 @@ esac
 wget -P /tmp "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${REL}/linux-${VER}/en-US/${FOX}"
 [[ "$?" -gt 0 ]] && exit 1
 
-echo -e "Uncompressing ${FOX}... "
+echo -n "Uncompressing ${FOX}... "
 tar -C /tmp -jxf /tmp/${FOX}
 rm /tmp/${FOX}
 echo "OK"
 
 FOX="${FOX::-8}"
-echo -e "Instaling ${FOX}... "
+echo -n "Instaling ${FOX}... "
 
 mv /tmp/firefox /opt/${FOX}
 
