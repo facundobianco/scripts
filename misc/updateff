@@ -1,0 +1,50 @@
+#!/bin/bash
+
+if [ `id -u` -gt 0 ]
+then
+    echo "You must be root for running this script"
+    exit 1
+fi
+
+if [ -z "$1" ]
+then
+    echo "Which version of Firefox would I to upgrade?"
+    exit 1
+fi
+
+REL="$1"
+FOX="firefox-${REL}.tar.bz2"
+
+case `uname -m` in
+    i?86)   VER="i686"   ;;
+    x86_64) VER="x86_64" ;;
+esac
+
+wget -P /tmp "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${REL}/linux-${VER}/en-US/${FOX}"
+[[ "$?" -gt 0 ]] && exit 1
+
+echo -e "Uncompressing ${FOX}... "
+tar -C /tmp -jxf /tmp/${FOX}
+rm /tmp/${FOX}
+echo "OK"
+
+FOX="${FOX::-8}"
+echo -e "Instaling ${FOX}... "
+
+mv /tmp/firefox /opt/${FOX}
+
+[[ "$VER" = "x86_64" ]] && LIB=64
+ln -s /usr/lib${LIB:-}/mozilla/plugins /opt/${FOX}/browser
+
+UPX=`whereis -b upx | sed -n 's/.*: \([^ ]*\) .*/\1/p'`
+if [ -n "$UPX" ]
+then
+    cp /opt/${FOX}/firefox /opt/${FOX}/firefox-save
+    ${UPX} /opt/${FOX}/firefox
+fi
+
+[[ ! -d /opt/firefox ]] && mkdir /opt/firefox
+ln -s /opt/${FOX}/firefox /opt/firefox/firefox
+ln -sf /opt/firefox/firefox /usr/local/bin/firefox
+
+echo "OK"
