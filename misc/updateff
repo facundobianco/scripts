@@ -40,11 +40,16 @@ UPX=`whereis -b upx | sed -n 's/.*: \([^ ]*\) .*/\1/p'`
 if [ -n "$UPX" ]
 then
     cp /opt/${FOX}/firefox /opt/${FOX}/firefox-save
-    ${UPX} /opt/${FOX}/firefox
+    echo "Compression firefox binary:"
+    ${UPX} -qq --best /opt/${FOX}/firefox
 fi
 
 [[ ! -d /opt/firefox ]] && mkdir /opt/firefox
-ln -s /opt/${FOX}/firefox /opt/firefox/firefox
-ln -sf /opt/firefox/firefox /usr/local/bin/firefox
+ln -sf /opt/${FOX}/firefox /opt/firefox/firefox
+
+if [ -h /usr/local/bin/firefox ] || [ ! -a /usr/local/bin/firefox ]
+then
+    ln -sf /opt/firefox/firefox /usr/local/bin/firefox
+fi
 
 echo "OK"
