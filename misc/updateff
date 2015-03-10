@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# Tired about new Firefox updates? Maybe this script helps you
 
 if [ `id -u` -gt 0 ]
 then
@@ -29,20 +31,12 @@ rm /tmp/${FOX}
 echo "OK"
 
 FOX="${FOX::-8}"
-echo -n "Instaling ${FOX}... "
+echo -n "Installing ${FOX}... "
 
 mv /tmp/firefox /opt/${FOX}
 
 [[ "$VER" = "x86_64" ]] && LIB=64
 ln -s /usr/lib${LIB:-}/mozilla/plugins /opt/${FOX}/browser
-
-UPX=`whereis -b upx | sed -n 's/.*: \([^ ]*\) .*/\1/p'`
-if [ -n "$UPX" ]
-then
-    cp /opt/${FOX}/firefox /opt/${FOX}/firefox-save
-    echo "Compression firefox binary:"
-    ${UPX} -qq --best /opt/${FOX}/firefox
-fi
 
 [[ ! -d /opt/firefox ]] && mkdir /opt/firefox
 ln -sf /opt/${FOX}/firefox /opt/firefox/firefox
@@ -53,3 +47,11 @@ then
 fi
 
 echo "OK"
+
+UPX=`whereis -b upx | sed -n 's/.*: \([^ ]*\) .*/\1/p'`
+if [ -n "$UPX" ]
+then
+    cp /opt/${FOX}/firefox /opt/${FOX}/firefox-save
+    echo "[PLUS] Compression firefox binary:"
+    ${UPX} -qq --best /opt/${FOX}/firefox
+fi
