@@ -9,12 +9,13 @@ then
     exit 1
 fi
 
-DOWN32=`sed -n 's/DOWNLOAD="\([^"]*\)"/\1/p' ${INFO}`
-DOWN64=`sed -n 's/DOWNLOAD_x86_64="\([^"]*\)"/\1/p' ${INFO}`
+down(){ for FILE in ${@} ; do wget --timeout=20 --tries=2 --passive-ftp -c ${FILE} ; done ; }
 
-if [ `uname -m` = "x86_64" ] && [ -n "$DOWN64" ]
+. ${INFO}
+
+if [ `uname -m` = "x86_64" ] && [ -n "$DOWNLOAD_x86_64" ]
 then
-    wget ${DOWN64}
+    down ${DOWNLOAD_x86_64}
 else
-    wget ${DOWN32}
+    down ${DOWNLOAD}
 fi
