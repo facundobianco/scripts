@@ -2,14 +2,32 @@
 #
 # Download source file for slackbuilds script
 
+WOPT="--timeout=20 --tries=2 --passive-ftp -c"
 INFO=`/bin/ls -1 *info 2> /dev/null`
-if [ "$?" -gt 0 ]
+
+if [ -z "$INFO" ]
 then
     echo "There isn't an info file."
     exit 1
 fi
 
-down(){ for FILE in ${@} ; do wget --timeout=20 --tries=2 --passive-ftp -c ${FILE} ; done ; }
+down()
+{ 
+    for FILE in ${@}
+    do 
+	wget ${WOPT} ${FILE}
+	
+	# SSL verification failure
+	if [ "$?" -eq 5 ] 
+	then
+	    read -p "Do you want to try again using this option? [Y/n] " yn
+	    if [ -z "$yn" ] || [ "$yn" = [yY] ]
+	    then
+		wget ${WOPT} --no-check-certificate ${FILE}
+	    fi
+	fi
+    done 
+}
 
 . ${INFO}
 
