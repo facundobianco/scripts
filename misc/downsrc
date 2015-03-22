@@ -2,7 +2,7 @@
 #
 # Download source file for slackbuilds script
 
-WOPT="--timeout=20 --tries=2 --passive-ftp -c"
+WOPT="-nv --timeout=20 --tries=2 --passive-ftp -c"
 INFO=`/bin/ls -1 *info 2> /dev/null`
 
 if [ -z "$INFO" ]
