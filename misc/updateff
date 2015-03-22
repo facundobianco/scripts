@@ -22,8 +22,8 @@ case `uname -m` in
     x86_64) VER="x86_64" ;;
 esac
 
-wget -P /tmp "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${REL}/linux-${VER}/en-US/${FOX}"
-[[ "$?" -gt 0 ]] && exit 1
+echo "Downloading ${FOX}... "
+wget -nv -P /tmp "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${REL}/linux-${VER}/en-US/${FOX}" || exit 1
 
 echo -n "Uncompressing ${FOX}... "
 tar -C /tmp -jxf /tmp/${FOX}
