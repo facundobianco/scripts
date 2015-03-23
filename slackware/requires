@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# List slackbuild dependencies
+
+# TODO
+# ----
+#
+# * Add options
+#   |_ list dependencies
+#   |_ list dependencies with package name at last
+# * Check installed packaged
+#   |_ list uninstalled
+#
+# By default, it will list unistalled packages for running it as
+# 
+#    $> sport install `requires tweepy`
+
+PKG="$1"
+BUILDSTXT=/usr/ports/SLACKBUILDS.TXT
+
+hasreq()
+{ 
+    REQ=`sed -n '/NAME: '"$1"'$/,/^$/s/.*REQUIRES: //p' "$BUILDSTXT"`
+    
+    if [ -n "$REQ" ]
+    then
+        for PKG in ${REQ}
+        do
+            TREE="$PKG $TREE"
+            hasreq ${PKG}
+        done
+    fi
+}
+
+hasreq ${PKG}
+
+for PKG in ${TREE}
+do
+    if [[ ! "$REQS" == *"$PKG"* ]]
+    then
+        REQS="$REQS $PKG"
+    fi
+done
+
+echo ${REQS}
