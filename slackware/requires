@@ -1,26 +1,57 @@
 #!/bin/bash
 
-# List slackbuild dependencies
+# For find SLACKBUILD.TXT file set your SBOPATH here:
+SBOPATH=/usr/ports
 
-# TODO
-# ----
-#
-# * Add options
-#   |_ list dependencies
-#   |_ list dependencies with package name at last
-# * Check installed packaged
-#   |_ list uninstalled
-#
-# By default, it will list unistalled packages for running it as
-# 
-#    $> sport install `requires tweepy`
+# help
+help()
+{
+    echo "requires <options> [package]"
+    echo ""
+    echo "List packages dependencies for SlackBuilds.org repository"
+    echo "By default, it will list unistalled packages:"
+    echo ""
+    echo "  \$> sport install \`requires tweepy\`"
+    echo ""
+    echo "Options:"
+    echo "  -l"
+    echo "  --list"
+    echo "      List installed and uninstalled packages"
+    echo ""
+    echo "  -h"
+    echo "  --help"
+    echo "      This help output :)"
 
-PKG="$1"
-BUILDSTXT=/usr/ports/SLACKBUILDS.TXT
+    exit 0
+}
 
+# Check variables
+[[ -z "$1" ]] && help
+
+if [ -z "$SBOPATH" ]
+then
+    echo "Define the path for SLACKBUILDS.TXT"
+    echo "You can edit it into the script file: $0"
+    exit 1
+fi 
+
+if [ -z "${SBOPATH##*/}" ]
+then
+    BUILDSTXT=${SBOPATH}SLACKBUILDS.TXT
+else
+    BUILDSTXT=${SBOPATH}/SLACKBUILDS.TXT
+fi
+
+if [ ! -r "$BUILDSTXT" ]
+then
+    echo "ERROR: Verify if file exists and you can read it: $BUILDSTXT"
+    exit 1
+fi
+
+# funcs
 hasreq()
 { 
-    REQ=`sed -n '/NAME: '"$1"'$/,/^$/s/.*REQUIRES: //p' "$BUILDSTXT"`
+    REQ=`sed -n '/NAME: '"$1"'$/,/^$/s/.*REQUIRES: //p' ${BUILDSTXT}`
     
     if [ -n "$REQ" ]
     then
@@ -32,8 +63,39 @@ hasreq()
     fi
 }
 
-hasreq ${PKG}
+haspkg()
+{
+    if [[ -n `sed -n '/NAME: '"$1"'$/p' ${BUILDSTXT}` ]]
+    then
+        PKGNAM=${1}
+        hasreq ${PKGNAM}
+    else
+        echo "Unknow package name: \"$1\""
+	exit 1
+    fi
+}
 
+list()
+{
+    for PKG in ${@}
+    do
+        echo ${PKG}
+    done
+}
+
+# opts
+while [ -n "$1" ]
+do
+    case ${1} in
+        -l|--list)       LIST=1 ;;
+        -h|--help)       help ;;
+	-*|--*)          echo "Wrong option \"$1\"" ; exit 1 ;;
+	*)               haspkg "$1" ;;         
+    esac
+    shift
+done
+
+# main()
 for PKG in ${TREE}
 do
     if [[ ! "$REQS" == *"$PKG"* ]]
@@ -42,4 +104,41 @@ do
     fi
 done
 
-echo ${REQS}
+for PKG in ${REQS} ${PKGNAM}
+do
+    PKGLOG=`ls /var/log/packages/${PKG}* 2> /dev/null`
+	
+    if [ -n "$PKGLOG" ]
+    then
+        PKGINS="$PKGINS ${PKGLOG##*/}"
+    else
+        PKGUNI="$PKGUNI $PKG"
+    fi
+done
+
+if [ -n "$LIST" ]
+then
+    if   [ -n "$PKGINS" ]
+    then
+        echo "--- Installed"
+        list ${PKGINS}
+    fi
+    
+    if [ -n "$PKGINS" ] && [ -n "$PKGUNI" ]
+    then
+        echo ""
+    fi
+    
+    if [ -n "$PKGUNI" ]
+    then
+        echo "--- Unistalled"
+	list ${PKGUNI}
+    fi
+    
+    exit 0
+fi
+
+if [ -n "$PKGUNI" ]
+then
+    echo ${PKGUNI}
+fi
