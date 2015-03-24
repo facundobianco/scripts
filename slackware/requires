@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# For find SLACKBUILD.TXT file set your SBOPATH here:
+# To find SLACKBUILD.TXT file set your SBOPATH here:
 SBOPATH=/usr/ports
 
 # help
