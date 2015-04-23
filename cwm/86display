@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Laptop
+DISP0="LVDS1"
+MODE0="1366x768"
+# 23inch monitor
+DISP1="HDMI1"
+MODE1="1920x1080"
+
+chdis()
+{
+    xrandr --output ${1} --off --output ${2} --mode ${3}
+    sed -i '/minimum_size/s/ [0-9]*/ '${3%%x*}'/' ${HOME}/.config/conky/conkyrc
+}
+
+if [[ `xrandr -q | sed -n '/'"$DISP1"'/s/ [0-9(].*//p'` == "$DISP1 connected" ]]
+then
+    chdis ${DISP0} ${DISP1} ${MODE1}
+else
+    chdis ${DISP1} ${DISP0} ${MODE0}
+fi
+
+for WINDOW in `xprop -root | sed '/_LIST(WINDOW)/!d;s/.*# //;s/,//g'`
+do  
+    wmctrl -ir ${WINDOW} -b add,maximized_vert,maximized_horz
+done
