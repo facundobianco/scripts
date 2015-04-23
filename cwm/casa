@@ -1,0 +1,9 @@
+#!/bin/bash
+
+DOMAIN="Home"
+HOSTLAN="mac"
+HOSTWAN="casa"
+
+[[ `sed -n '/^domain/s/.* //p' /etc/resolv.conf` = "$DOMAIN" ]] && HOST="$HOSTLAN"
+
+urxvt -name casa -e ssh ${HOST:-$HOSTWAN} &

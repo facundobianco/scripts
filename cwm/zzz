@@ -1,0 +1,9 @@
+#!/bin/bash
+
+xlock &
+sleep 3
+
+case `uname -s` in
+    Linux)   sudo /usr/sbin/pm-hibernate ;;
+    OpenBSD) /usr/sbin/zzz -Z ;;
+esac

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ `uname -s` = "Linux" ]
+then
+    case ${1} in
+        down) amixer --quiet set Master 3- ;;
+	up)   amixer --quiet set Master 3+ ;;
+	mute) amixer --quiet set Master toggle ;;
+    esac
+else
+    case ${1} in
+        down) mixerctl outputs.master=-3 ;;
+	up)   mixerctl outputs.master=+3 ;;
+	mute) mixerctl outputs.master.mute=toggle ;;
+    esac
+fi
