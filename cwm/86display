@@ -7,13 +7,21 @@ MODE0="1366x768"
 DISP1="HDMI1"
 MODE1="1920x1080"
 
+if [ -n "$1" ]
+then
+    case ${1} in
+        d|default) DEFAULT=1 ;;
+	*) echo "Dafuq?" ; exit 1 ;;
+    esac
+fi
+
 chdis()
 {
     xrandr --output ${1} --off --output ${2} --mode ${3}
     sed -i '/minimum_size/s/ [0-9]*/ '${3%%x*}'/' ${HOME}/.config/conky/conkyrc
 }
 
-if [[ `xrandr -q | sed -n '/'"$DISP1"'/s/ [0-9(].*//p'` == "$DISP1 connected" ]]
+if [[ `xrandr -q | sed -n '/'"$DISP1"'/s/ [0-9(].*//p'` == "$DISP1 connected" ]] && [ -z "$DEFAULT" ]
 then
     chdis ${DISP0} ${DISP1} ${MODE1}
 else
