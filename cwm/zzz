@@ -1,9 +1,19 @@
 #!/bin/bash
 
-xlock &
+pkill -HUP -f ssh\ 
+ssh-add -D
+
+xlock & 
 sleep 3
 
-case `uname -s` in
-    Linux)   sudo /usr/sbin/pm-hibernate ;;
-    OpenBSD) /usr/sbin/zzz -Z ;;
-esac
+while pgrep -f getmail > /dev/null
+do
+    sleep 2
+done
+
+if [ `uname -s` = "Linux" ]
+then
+    sudo /usr/sbin/pm-hibernate
+else
+    /usr/sbin/zzz -Z
+fi
