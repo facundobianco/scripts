@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pkill -HUP -f ssh\ 
+pkill -HUP -f "ssh "
 ssh-add -D
 
 xlock & 
