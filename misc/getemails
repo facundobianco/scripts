@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CONFDIR=/home/vando/.getmail
+GETMAIL=`which getmail`
+
+if [ -z "`pgrep -f ${GETMAIL}`" ]
+then
+    for FILE in ${CONFDIR}/rc-*
+    do
+        RCFILES="$RCFILES -r $FILE"
+    done
+
+    ${GETMAIL} ${RCFILES} ${@} 2> /tmp/getmail-err.log
+fi
