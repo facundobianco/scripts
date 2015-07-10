@@ -1,14 +1,13 @@
 #!/bin/bash
 
 CONFDIR=/home/vando/.getmail
-GETMAIL=`which getmail`
 
-if [ -z "`pgrep -f ${GETMAIL}`" ]
+if [ -z "`pgrep -d, -x getmail`" ]
 then
     for FILE in ${CONFDIR}/rc-*
     do
         RCFILES="$RCFILES -r $FILE"
     done
 
-    ${GETMAIL} ${RCFILES} ${@} 2> /tmp/getmail-err.log
+    getmail ${RCFILES} ${@} 2> /tmp/getmail-err.log
 fi

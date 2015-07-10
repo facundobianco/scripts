@@ -1,12 +1,18 @@
 #!/bin/bash
 
-pkill -HUP -f "ssh "
+pkill -HUP -x ssh
 ssh-add -D
+
+if [ "`xrandr -q | sed -n '/HDMI/s/ [0-9].*//p'`" = "HDMI1 connected" ]
+then
+    86display default
+    sleep 3
+fi
 
 xlock & 
 sleep 3
 
-while pgrep -f getmail > /dev/null
+while pgrep -x getmail > /dev/null
 do
     sleep 2
 done
