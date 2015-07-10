@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Screenshots with scrot
+
+DIRC="/tmp/captures"
+IMGN=`date +%s.png`
+
+[ ! -d ${DIRC} ] && mkdir ${DIRC}
+
+if [ -z "$1" ]
+then
+    scrot -s ${DIRC}/${IMGN}
+else
+    scrot ${DIRC}/${IMGN}
+fi
+
+notify-send -t 3000 "Screenshot $IMGN saved"
