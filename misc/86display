@@ -21,14 +21,23 @@ chdis()
     sed -i '/minimum_size/s/ [0-9]*/ '${3%%x*}'/' ${HOME}/.config/conky/conkyrc
 }
 
-if [[ `xrandr -q | sed -n '/'"$DISP1"'/s/ [0-9(].*//p'` == "$DISP1 connected" ]] && [ -z "$DEFAULT" ]
+if [ "`xrandr -q | sed -n '/'"$DISP1"'/s/ [0-9(].*//p'`" = "$DISP1 connected" ] && [ -z "$DEFAULT" ]
 then
     chdis ${DISP0} ${DISP1} ${MODE1}
 else
     chdis ${DISP1} ${DISP0} ${MODE0}
 fi
 
-for WINDOW in `xprop -root | sed '/_LIST(WINDOW)/!d;s/.*# //;s/,//g'`
-do  
-    wmctrl -ir ${WINDOW} -b add,maximized_vert,maximized_horz
+sleep 1
+
+for ID in `xprop -root -notype _NET_CLIENT_LIST | sed 's/.*# //'`
+do
+    case `xprop -id "$ID" -notype WM_CLASS | sed 's/.*"\([^"]*\)"/\1/'` in
+        URxvt|Firefox|Google*|libreoffice*) 
+            for ACTION in remove add
+	    do
+	        wmctrl -ir ${ID} -b ${ACTION},maximized_vert,maximized_horz
+	    done
+        ;;
+    esac
 done

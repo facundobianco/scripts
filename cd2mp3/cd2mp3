@@ -1,0 +1,20 @@
+#!/bin/sh
+
+FILE=cddbinfo.txt
+
+cdparanoia -B -v
+
+rm track00.cdda.wav
+
+for i in `echo *.wav`
+do
+        lame -cbr -b 320 -q 2 -t -p $i $i.mp3;
+        rm $i;
+done
+
+mp3cddb *.mp3
+
+if [ -f $FILE ]; then
+        mp3cddbtag $FILE
+fi
+

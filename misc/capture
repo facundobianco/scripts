@@ -14,4 +14,4 @@ else
     scrot ${DIRC}/${IMGN}
 fi
 
-notify-send -t 3000 "Screenshot $IMGN saved"
+notify-send "CAPTURE" "Saved as $IMGN"

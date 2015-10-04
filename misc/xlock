@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# CAUTION: This script does not use/launch xlock(1).
+
+notify-send "DUNST_COMMAND_PAUSE"
+i3lock --nofork -ec 000000
+notify-send "DUNST_COMMAND_RESUME"

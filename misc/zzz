@@ -9,9 +9,6 @@ then
     sleep 3
 fi
 
-xlock & 
-sleep 3
-
 while pgrep -x getmail > /dev/null
 do
     sleep 2
@@ -19,7 +16,9 @@ done
 
 if [ `uname -s` = "Linux" ]
 then
-    sudo /usr/sbin/pm-hibernate
+    sudo /usr/sbin/pm-hibernate &
 else
-    /usr/sbin/zzz -Z
+    /usr/sbin/zzz -Z &
 fi
+
+xlock
