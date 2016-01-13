@@ -12,6 +12,14 @@ Consulting](http://holland-consulting.net/tech/obsdmp3.html)).
 For activate one screen output (LVDS or HDMI). Also, it resizes some
 X11 applications.
 
+### browser
+
+This script should be use with [URxvt's url-select](https://github.com/muennich/urxvt-perls#url-select).
+It opens URL videos in [mpv](https://mpv.io), URL images in [feh](https://feh.finalrewind.org), otherwise,
+Firefox is the default application.
+
+Based on solution from [urxvt-perls' issues](https://github.com/muennich/urxvt-perls/issues/67#issuecomment-156712325).
+
 ### capture
 
 Takes an screenshot for the whole screen or an specific X11 window. For
@@ -31,7 +39,7 @@ multiple accounts.
 
 For lazy bloggers who use [Jekyll](https://jekyllrb.com).
 
-### volume
+### volumen
 
 Manages speaker's audio levels.
 

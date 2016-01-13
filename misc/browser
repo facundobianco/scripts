@@ -1,0 +1,17 @@
+#!/bin/bash
+# https://github.com/muennich/urxvt-perls/issues/67
+
+URL="$1"
+
+if [[ $URL =~ http.*youtu\.*be.* ]] || [[ $URL =~ .*(mp[34]|ogg|avi|webm)$ ]] 
+then 
+    mpv ${URL}
+elif [[ $URL =~ http.*vimeo.* ]]
+then 
+    mpv $(youtube-dl -g ${URL})
+elif [[ $URL =~ .*(jpg|jpeg|png|gif)$ ]]
+then
+    feh ${URL}
+else
+    firefox --new-tab ${URL}
+fi
