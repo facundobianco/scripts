@@ -11,6 +11,7 @@ if [ -n "$1" ]
 then
     case ${1} in
         d|default) DEFAULT=1 ;;
+	s|sala) xrandr --output HDMI1 --mode 1366x768 --output LVDS1 --mode 1366x768 --same-as HDMI1 ; exit 0 ;;
 	*) echo "Dafuq?" ; exit 1 ;;
     esac
 fi
@@ -33,7 +34,7 @@ sleep 1
 for ID in `xprop -root -notype _NET_CLIENT_LIST | sed 's/.*# //'`
 do
     case `xprop -id "$ID" -notype WM_CLASS | sed 's/.*"\([^"]*\)"/\1/'` in
-        URxvt|Firefox|Google*|libreoffice*) 
+        URxvt|Firefox|Iceweasel|Google*|libreoffice*) 
             for ACTION in remove add
 	    do
 	        wmctrl -ir ${ID} -b ${ACTION},maximized_vert,maximized_horz
