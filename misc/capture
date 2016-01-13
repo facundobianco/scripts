@@ -1,6 +1,4 @@
 #!/bin/bash
-#
-# Screenshots with scrot
 
 DIRC="/tmp/captures"
 IMGN=`date +%s.png`
@@ -11,7 +9,12 @@ if [ -z "$1" ]
 then
     scrot -s ${DIRC}/${IMGN}
 else
-    scrot ${DIRC}/${IMGN}
+    if [ `uname -s` = "Linux" ]
+    then
+        mtpaint -s
+    else
+        scrot ${DIRC}/${IMGN}
+    fi
 fi
 
 notify-send "CAPTURE" "Saved as $IMGN"
