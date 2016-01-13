@@ -3,7 +3,7 @@ This is my personal scripts repository.
 ## cd2mp3
 
 Creating MP3s with OpenBSD (scripts made by [Holland
-Consulting](http://holland-consulting.net/tech/obsdmp3.html).
+Consulting](http://holland-consulting.net/tech/obsdmp3.html)).
 
 ## misc
 
@@ -45,3 +45,46 @@ image from [meskarune's i3lock-fancy](http://meskarune.github.io/i3lock-fancy).
 Puts the system in hibernation. Before that, it kills your SSH
 connections, kills your fetching emails and selects LVDS as
 default screen.
+
+## openBSD
+
+It's a fork from [OpenBSD Journal](http://undeadly.org/cgi?action=article&sid=20071224164233&mode=flat)
+for using multiple wireless network profiles. I added WPA support, wireless
+options and network profiles.
+
+## openWRT
+
+Updates at [FreeDNS](https://freedns.afraid.org) your dinamic public IP from your openWRT router.
+
+## pfSense
+
+### checkconfig.sh
+
+I created this script because I worked with n00bs that made changes a
+lot on our pfSense. It sends an email with diff on `/cf/conf/config.xml`.
+
+### checkipsec.php
+
+It sends an email when one link is offline.
+
+## Slackware
+
+### downsrc
+
+Download source file for slackbuilds script.
+
+### requires
+
+List packages dependencies for [SlackBuilds](http://slackbuilds.org)
+repository. By default, it will list unistalled packages.
+
+I used it with [sport](http://slackermedia.info/sport)
+
+```
+sport install `requires tweepy`
+```
+
+### updateff
+
+Updates Firefox binary releases from mozilla.net. Also, compress
+Firefox with [upx](http://upx.sourceforge.net).
