@@ -15,7 +15,7 @@ X11 applications.
 ### capture
 
 Takes an screenshot for the whole screen or an specific X11 window. For
-GNU/Linux, uses `mtpaint`.
+GNU/Linux, uses [mtpaint](http://mtpaint.sourceforge.net).
 
 ### casa
 
@@ -24,7 +24,8 @@ server. In spanish, "casa" means "home".
 
 ### getemails
 
-Fetchs emails with `getmail` from multiple accounts.
+Fetchs emails with [getmail](http://pyropus.ca/software/getmail) from
+multiple accounts.
 
 ### newpost
 
