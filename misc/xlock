@@ -3,5 +3,6 @@
 # CAUTION: This script does not use/launch xlock(1).
 
 notify-send "DUNST_COMMAND_PAUSE"
-i3lock --nofork -ec 000000
+i3lock --nofork -ec 000000 \
+       -i ~/.config/xlock/lock_`xwininfo -root | sed -n '/Width:/s/.*: //p'`.png
 notify-send "DUNST_COMMAND_RESUME"
