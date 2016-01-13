@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pkill -HUP -x ssh
-ssh-add -D
+pkill -HUP -x getmail
 
 if [ "`xrandr -q | sed -n '/HDMI/s/ [0-9].*//p'`" = "HDMI1 connected" ]
 then
@@ -9,14 +9,14 @@ then
     sleep 3
 fi
 
-while pgrep -x getmail > /dev/null
-do
-    sleep 2
-done
-
 if [ `uname -s` = "Linux" ]
 then
-    sudo /usr/sbin/pm-hibernate &
+    if [ -s /etc/debian_version ]
+    then
+	sudo systemctl hibernate &
+    else
+        sudo /usr/sbin/pm-hibernate &
+    fi
 else
     /usr/sbin/zzz -Z &
 fi
